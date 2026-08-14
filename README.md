@@ -3,8 +3,8 @@
 > Modélisation de la courbe de puissance et détection d'anomalies multivariées sur des données
 > SCADA réelles d'un parc éolien, à l'aide d'un Isolation Forest non supervisé.
 
-![Score d'anomalie dans le temps](assets/Score_temporelle.png)
 ![courbe de puissance](assets/courbe_de_puissance.png)
+![Score d'anomalie dans le temps](assets/Score_temporelle.png)
 
 ![Python](https://img.shields.io/badge/Python-3.10+-blue)
 ![scikit--learn](https://img.shields.io/badge/scikit--learn-1.3+-orange)
