@@ -1,7 +1,7 @@
 # 🌬️ Analyse de performance et détection d'anomalies — Parc éolien
 
 > Modélisation de la courbe de puissance et détection d'anomalies multivariées sur des données
-> SCADA réelles d'un parc éolien, à l'aide d'un Isolation Forest non supervisé.
+> Données réelles d'un parc éolien, à l'aide d'un Isolation Forest non supervisé.
 
 ![courbe de puissance](assets/courbe_de_puissance.png)
 ![Score d'anomalie dans le temps](assets/Score_temporelle.png)
@@ -15,13 +15,13 @@
 
 ## 🧠 En bref
 
-Ce projet exploite des données SCADA réelles (capteurs, production, températures, statuts) d'une
+Ce projet exploite des données réelles (capteurs, production, températures, statuts) d'une
 turbine du parc éolien de Kelmarsh pour :
 
 1. Construire la **courbe de puissance** de la turbine — la référence de comportement normal
    reliant vitesse du vent et puissance produite.
 2. Détecter des **anomalies multivariées** via un Isolation Forest, en combinant plusieurs
-   variables SCADA plutôt qu'un seul indicateur de performance.
+   variables plutôt qu'un seul indicateur de performance.
 3. Fournir des **visualisations interactives** (Plotly) permettant d'explorer les anomalies
    détectées dans leur contexte temporel et opérationnel.
 
@@ -49,9 +49,9 @@ interprétable, puis y superposer une détection d'anomalies plus fine.
 
 Le suivi de performance d'un parc éolien repose en grande partie sur la détection précoce de
 sous-performances ou de dérives mécaniques, avant qu'elles ne se traduisent par une panne ou une
-perte de production significative. Les données SCADA (Supervisory Control and Data Acquisition)
-fournissent un volume important de mesures en continu, mais sans label indiquant explicitement
-les périodes anormales — un contexte typique en maintenance industrielle, où la détection
+perte de production significative. Les données fournissent un volume important de mesures en continu,
+ mais sans label indiquant explicitement les périodes anormales — 
+ un contexte typique en maintenance industrielle, où la détection
 d'anomalies doit s'appuyer sur des méthodes non supervisées.
 
 ## 🔍 Méthodologie
@@ -108,8 +108,8 @@ arbitraire, faute de vérité terrain disponible pour la calibrer précisément.
 
 ```bash
 # Cloner le repo
-git clone https://github.com/TON_USERNAME/wind-scada-anomaly-detection.git
-cd wind-scada-anomaly-detection
+git clone https://github.com/TON_USERNAME/scada.git
+cd scada
 
 # Installer les dépendances
 pip install -r requirements.txt
@@ -118,24 +118,24 @@ pip install -r requirements.txt
 jupyter notebook 01_analysis.ipynb
 ```
 
-Le notebook attend les données SCADA du parc de Kelmarsh dans un dossier `dataset/`, organisées
+Le notebook attend les données du parc de Kelmarsh dans un dossier `dataset/`, organisées
 par année (voir [Dataset](#️-dataset) pour le téléchargement).
 
 ## 📁 Structure du projet
 
 ```
-wind-scada-anomaly-detection/
+scada/
 ├── README.md
 ├── requirements.txt
 ├── 01_analysis.ipynb       # Notebook principal : courbe de puissance et détection d'anomalies
-├── dataset/                 # Données SCADA (non versionnées, à télécharger séparément)
+├── dataset/                 # Données (non versionnées, à télécharger séparément)
 └── assets/
     └── ...                  # Captures d'écran pour ce README
 ```
 
 ## 🗂️ Dataset
 
-[Kelmarsh Wind Farm Data](https://zenodo.org/record/8252025) — données SCADA réelles du parc
+[Kelmarsh Wind Farm Data](https://zenodo.org/record/8252025) — données réelles du parc
 éolien de Kelmarsh (Royaume-Uni), en libre accès, couvrant plusieurs années et plusieurs
 turbines à pas de temps 10 minutes.
 
