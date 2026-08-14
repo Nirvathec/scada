@@ -1,45 +1,42 @@
-# 🌿 Détecteur de maladies sur feuilles de plantes
+# 🌬️ Analyse de performance et détection d'anomalies — Parc éolien
 
-> Prends une photo d'une feuille de tomate, poivron ou pomme de terre, et le modèle te dit
-> si elle est saine ou identifie la maladie la plus probable — en quelques secondes.
+> Modélisation de la courbe de puissance et détection d'anomalies multivariées sur des données
+> SCADA réelles d'un parc éolien, à l'aide d'un Isolation Forest non supervisé.
 
-<!-- 
-  📸 REMPLACE CETTE LIGNE par une capture d'écran ou un gif de l'app en action.
-  C'est la première chose que les gens verront : un visuel vaut mieux qu'un long texte.
--->
-![Démo de l'application](assets/demo.gif)
+![Score d'anomalie dans le temps](assets/Score_temporelle.png)
+![courbe de puissance](assets/courbe_de_puissance.png)
 
-[![Démo live](https://img.shields.io/badge/🚀%20Demo-Live%20sur%20Render-46E3B7)](https://plant-sickness-tnlj.onrender.com)
 ![Python](https://img.shields.io/badge/Python-3.10+-blue)
-![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-red)
+![scikit--learn](https://img.shields.io/badge/scikit--learn-1.3+-orange)
+![Plotly](https://img.shields.io/badge/Plotly-Interactive-3f4f75)
 ![License](https://img.shields.io/badge/License-MIT-green)
-
-**👉 [Essayer la démo en ligne](https://plant-sickness-tnlj.onrender.com)**
-
-> ⏳ L'app est hébergée sur le tier gratuit de Render : après une période d'inactivité, le
-> premier chargement peut prendre 30 à 60 secondes le temps que le service se réveille.
-> Merci de patienter, c'est normal !
 
 ---
 
 ## 🧠 En bref
 
-Ce projet est un classifieur d'images qui reconnaît **15 maladies** (+ état sain) sur des feuilles
-de **tomate, poivron et pomme de terre**, à partir d'une simple photo. Le modèle utilise le
-transfer learning (ResNet18 pré-entraîné) et atteint **99% d'accuracy** sur le jeu de test —
-un résultat à interpréter avec prudence (voir la section [Limites](#️-limites-et-esprit-critique)).
+Ce projet exploite des données SCADA réelles (capteurs, production, températures, statuts) d'une
+turbine du parc éolien de Kelmarsh pour :
 
-Une interface web ([Gradio](https://www.gradio.app/)) permet de tester le modèle directement,
-sans écrire une ligne de code.
+1. Construire la **courbe de puissance** de la turbine — la référence de comportement normal
+   reliant vitesse du vent et puissance produite.
+2. Détecter des **anomalies multivariées** via un Isolation Forest, en combinant plusieurs
+   variables SCADA plutôt qu'un seul indicateur de performance.
+3. Fournir des **visualisations interactives** (Plotly) permettant d'explorer les anomalies
+   détectées dans leur contexte temporel et opérationnel.
+
+L'objectif est de démontrer une approche de data science appliquée à la maintenance
+industrielle : partir de données brutes non labellisées, construire une référence métier
+interprétable, puis y superposer une détection d'anomalies plus fine.
 
 ---
 
 ## 📋 Sommaire
 
 - [Le problème](#-le-problème)
+- [Méthodologie](#-méthodologie)
 - [Résultats](#-résultats)
-- [Limites et esprit critique](#️-limites-et-esprit-critique)
-- [Comment ça marche](#️-comment-ça-marche)
+- [Limites](#-limites)
 - [Installation et utilisation](#-installation-et-utilisation)
 - [Structure du projet](#-structure-du-projet)
 - [Dataset](#️-dataset)
@@ -50,113 +47,120 @@ sans écrire une ligne de code.
 
 ## 🌱 Le problème
 
-Détecter une maladie sur une plante tôt permet d'agir avant qu'elle ne se propage. Dans un
-contexte agricole, ce genre d'outil peut aider à un premier diagnostic rapide, en attendant
-l'avis d'un professionnel. C'est aussi un bon cas d'usage pour explorer un pipeline complet
-de computer vision : de la donnée brute jusqu'à une application déployée et accessible à tous.
+Le suivi de performance d'un parc éolien repose en grande partie sur la détection précoce de
+sous-performances ou de dérives mécaniques, avant qu'elles ne se traduisent par une panne ou une
+perte de production significative. Les données SCADA (Supervisory Control and Data Acquisition)
+fournissent un volume important de mesures en continu, mais sans label indiquant explicitement
+les périodes anormales — un contexte typique en maintenance industrielle, où la détection
+d'anomalies doit s'appuyer sur des méthodes non supervisées.
+
+## 🔍 Méthodologie
+
+**1. Courbe de puissance** 
+Construction de la courbe de puissance selon la méthode standard de binning par tranche de
+vitesse de vent (largeur 0.5 m/s, cohérente avec la norme IEC 61400-12), après exclusion des
+périodes d'arrêt de la turbine. Cette courbe sert de référence de comportement attendu.
+
+**2. Détection d'anomalies multivariée** 
+Un Isolation Forest est entraîné sur sept variables couvrant différents sous-systèmes de la
+turbine (vitesse du vent, puissance, vitesse de rotor, température de l'huile du multiplicateur,
+température du palier du générateur, température de la nacelle, angle de pale). Ce choix permet
+de détecter des anomalies invisibles sur la seule courbe de puissance — par exemple une
+combinaison de légers écarts sur plusieurs variables, chacun insuffisant isolément pour être
+qualifié d'anormal.
+
+**3. Visualisation** 
+Les résultats sont présentés via deux graphiques Plotly interactifs (zoom, survol, navigation
+temporelle) : la localisation des anomalies sur la courbe de puissance, et leur répartition dans
+le temps — utile pour distinguer des anomalies isolées (souvent du bruit de mesure) de véritables
+clusters temporels, plus évocateurs d'un phénomène réel.
 
 ## 📊 Résultats
 
-Évalués sur un jeu de test de 3096 images, jamais vues pendant l'entraînement :
-
-| Métrique | Score |
+| Indicateur | Valeur |
 |---|---|
-| Accuracy globale | 99% |
-| F1-score (macro avg) | 0.99 |
-| F1-score (classe la plus rare, *Potato — Sain*, 152 images) | 0.98 |
+| Période analysée | 2016 – 2020 |
+| Lignes utilisées pour la détection | ~216 000 |
+| Anomalies détectées | ~2% des observations (paramètre `contamination`) |
 
-![Matrice de confusion](assets/confusion_matrix.png)
+La courbe de puissance obtenue est cohérente avec le comportement théorique attendu (démarrage
+progressif dès ~3 m/s, plateau proche de la puissance nominale du modèle de turbine autour de
+2 000 kW), ce qui valide la qualité du nettoyage préalable.
 
-La gestion du déséquilibre des classes (jusqu'à 21x d'écart entre la classe la plus et la
-moins représentée) via une loss pondérée a permis de maintenir de bonnes performances même
-sur les classes minoritaires.
+Les anomalies détectées ne présentent pas de clusters temporels marqués sur la période observée,
+ce qui suggère des événements ponctuels et récurrents (transitoires, bruit de mesure, conditions
+de vent atypiques) plutôt qu'une dégradation progressive continue sur cette turbine.
 
-## ⚠️ Limites et esprit critique
+## ⚠️ Limites
 
-Un score de 99% est excellent, mais aussi un signal à interroger plutôt qu'à célébrer
-aveuglément. Le dataset utilisé ([PlantVillage](#️-dataset)) est constitué de photos prises
-**en conditions de laboratoire** : fond uniforme, feuille isolée, éclairage contrôlé.
+Isolation Forest évalue chaque observation indépendamment, sans notion de continuité temporelle.
+Une dérive lente et progressive (par exemple une température augmentant très graduellement sur
+plusieurs jours) peut ne jamais franchir individuellement le seuil d'anomalie, même si la
+tendance est significative sur la durée. La vue temporelle des scores permet d'atténuer
+partiellement cette limite en révélant les tendances visuellement, mais une approche
+complémentaire (analyse de séries temporelles, détection de rupture) serait nécessaire pour la
+traiter plus rigoureusement.
 
-C'est une limite connue et documentée dans la littérature scientifique : des modèles entraînés
-sur PlantVillage avec des scores proches de 99% voient souvent leurs performances chuter
-significativement sur des photos de terrain réelles (fond complexe, éclairage variable, feuille
-partiellement visible).
-
-**Conclusion honnête** : ce projet démontre une maîtrise du pipeline de bout en bout —
-exploration, entraînement, et déploiement d'une vraie application accessible en ligne — mais
-n'est pas prêt pour un usage terrain sans ré-entraînement sur des données plus réalistes.
-
-## ⚙️ Comment ça marche
-
-1. **Exploration des données** (`01_exploration.ipynb`) — analyse de la distribution des
-   classes, détection d'images corrompues, aperçu visuel.
-2. **Entraînement** (`02_training.ipynb`) — transfer learning sur un ResNet18 pré-entraîné
-   (ImageNet), avec loss pondérée pour compenser le déséquilibre des classes.
-3. **Déploiement** (`app.py`) — interface Gradio qui charge le modèle et renvoie les 3
-   hypothèses les plus probables avec leur score de confiance, hébergée sur Render.
+Le paramètre `contamination` (fixé à 2%) reste une hypothèse de départ raisonnable mais
+arbitraire, faute de vérité terrain disponible pour la calibrer précisément.
 
 ## 🚀 Installation et utilisation
 
 ```bash
 # Cloner le repo
-git clone https://github.com/TON_USERNAME/plant-sickness.git
-cd plant-sickness
+git clone https://github.com/TON_USERNAME/wind-scada-anomaly-detection.git
+cd wind-scada-anomaly-detection
 
 # Installer les dépendances
 pip install -r requirements.txt
 
-# Lancer l'interface en local
-python app.py
+# Lancer le notebook
+jupyter notebook 01_analysis.ipynb
 ```
 
-L'interface s'ouvre sur `http://127.0.0.1:7860`.
-
-Pour ré-entraîner le modèle toi-même, télécharge le [dataset PlantVillage](#️-dataset), place-le
-à la racine du projet, puis exécute les notebooks dans l'ordre (`01_exploration.ipynb` puis
-`02_training.ipynb`).
+Le notebook attend les données SCADA du parc de Kelmarsh dans un dossier `dataset/`, organisées
+par année (voir [Dataset](#️-dataset) pour le téléchargement).
 
 ## 📁 Structure du projet
 
 ```
-plant-sickness/
+wind-scada-anomaly-detection/
 ├── README.md
 ├── requirements.txt
-├── 01_exploration.ipynb   # Analyse du dataset
-├── 02_training.ipynb      # Entraînement du modèle
-├── app.py                 # Interface Gradio (déployée sur Render)
-├── models/
-│   └── best_model.pth     # Poids du modèle entraîné
-├── PlantVillage/          # Dataset (non versionné, à télécharger séparément)
+├── 01_analysis.ipynb       # Notebook principal : courbe de puissance et détection d'anomalies
+├── dataset/                 # Données SCADA (non versionnées, à télécharger séparément)
 └── assets/
-    └── ...                # Captures d'écran, gifs pour ce README
+    └── ...                  # Captures d'écran pour ce README
 ```
 
 ## 🗂️ Dataset
 
-[PlantVillage](https://www.kaggle.com/datasets/emmarex/plantdisease) — environ 20 000 images
-réparties sur 15 classes (maladies + état sain) pour la tomate, le poivron et la pomme de terre.
+[Kelmarsh Wind Farm Data](https://zenodo.org/record/8252025) — données SCADA réelles du parc
+éolien de Kelmarsh (Royaume-Uni), en libre accès, couvrant plusieurs années et plusieurs
+turbines à pas de temps 10 minutes.
 
 ## 🔭 Pistes d'amélioration
 
-- **Robustesse terrain** : ré-entraîner ou fine-tuner sur des photos prises en conditions
-  réelles (fond complexe, extérieur) pour valider la limite identifiée ci-dessus.
-- **Grad-CAM / explicabilité** : visualiser sur quelles zones de l'image le modèle se base
-  pour décider — vérifierait s'il regarde bien les symptômes et pas le fond.
-- **Élargir les espèces** : le dataset PlantVillage couvre d'autres cultures (maïs, raisin,
-  pomme...) qui pourraient être intégrées.
-- **Réduire le cold start** : passer sur un plan payant ou un hébergeur avec "always-on"
-  pour éliminer le délai de réveil du service après inactivité.
+- **Requêtage SQL** : exploiter DuckDB ou SQLite pour des agrégations et comparaisons entre
+  turbines directement en SQL, pertinent pour des analyses à l'échelle d'un parc entier.
+- **Analyse d'importance des variables** : comparer les distributions des variables entre
+  points normaux et anormaux pour identifier lesquelles contribuent le plus aux anomalies
+  détectées.
+- **Détection de rupture / tendance** : compléter l'approche ponctuelle actuelle par des
+  méthodes de séries temporelles capables de capter les dérives lentes.
+- **Extension multi-turbines** : généraliser l'analyse à l'ensemble du parc pour comparer les
+  profils d'anomalies entre turbines et identifier des effets de sillage ou des singularités
+  propres à une machine.
 
 ## 🛠️ Stack technique
 
-- **Modèle** : PyTorch (CPU), ResNet18 (via `timm`)
-- **Traitement de données** : torchvision, Pillow
-- **Évaluation** : scikit-learn
-- **Interface** : Gradio
-- **Visualisation** : Matplotlib, Seaborn
-- **Déploiement** : Render (Web Service, tier gratuit)
+- **Traitement de données** : pandas, NumPy
+- **Modélisation** : scikit-learn (Isolation Forest, StandardScaler)
+- **Visualisation** : Plotly (interactif), Matplotlib
+- **Format** : Jupyter Notebook
 
 ---
 
-*Projet réalisé dans le cadre de mon portfolio en data science / computer vision.*
+*Projet réalisé dans le cadre de mon portfolio en data science, avec un intérêt particulier pour
+les applications à l'énergie et à la maintenance industrielle.*
 *N'hésite pas à me contacter pour toute question : vergne.clement49@gmail.com*
