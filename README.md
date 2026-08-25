@@ -147,7 +147,7 @@ par un expert métier resterait nécessaire avant toute action de maintenance.
 
 ```bash
 # Cloner le repo
-git clone https://github.com/TON_USERNAME/scada.git
+git clone https://github.com/Nirvathec/scada.git
 cd scada
 
 # Installer les dépendances
