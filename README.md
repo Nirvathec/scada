@@ -102,7 +102,7 @@ signal brut et tendance détectée.
 | Périodes de dérive détectées | Voir `drift_alert` dans le notebook, variable selon le seuil choisi |
 
 La courbe de puissance obtenue est cohérente avec le comportement théorique attendu (démarrage
-progressif dès ~3 m/s, plateau proche de la puissance nominale du modèle de turbine autour de
+progressif dès ~3 \u00A0 m/s, plateau proche de la puissance nominale du modèle de turbine autour de
 2 000 kW), ce qui valide la qualité du nettoyage préalable.
 
 Les anomalies détectées par Isolation Forest ne présentent pas de clusters temporels marqués sur
