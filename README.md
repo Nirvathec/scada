@@ -20,7 +20,7 @@
 Ce projet exploite des données réelles (capteurs, production, températures, statuts) d'une
 turbine du parc éolien de Kelmarsh pour :
 
-1. Construire la **courbe de puissance** de la turbine — la référence de comportement normal
+1. Construire la **courbe de puissance** de la turbine, la référence de comportement normal
    reliant vitesse du vent et puissance produite.
 2. Détecter des **anomalies multivariées** via un Isolation Forest, en combinant plusieurs
    variables plutôt qu'un seul indicateur de performance.
@@ -31,7 +31,7 @@ turbine du parc éolien de Kelmarsh pour :
 
 L'objectif est de démontrer une approche de data science appliquée à la maintenance
 industrielle : partir de données brutes non labellisées, construire une référence métier
-interprétable, puis superposer deux angles de détection d'anomalies complémentaires — l'un
+interprétable, puis superposer deux angles de détection d'anomalies complémentaires, l'un
 ponctuel et multivarié, l'autre temporel et ciblé.
 
 ---
@@ -55,7 +55,7 @@ ponctuel et multivarié, l'autre temporel et ciblé.
 Le suivi de performance d'un parc éolien repose en grande partie sur la détection précoce de
 sous-performances ou de dérives mécaniques, avant qu'elles ne se traduisent par une panne ou une
 perte de production significative. Les données fournissent un volume important de mesures en
-continu, mais sans label indiquant explicitement les périodes anormales — un contexte typique en
+continu, mais sans label indiquant explicitement les périodes anormales, un contexte typique en
 maintenance industrielle, où la détection d'anomalies doit s'appuyer sur des méthodes non
 supervisées.
 
@@ -70,7 +70,7 @@ périodes d'arrêt de la turbine. Cette courbe sert de référence de comporteme
 Un Isolation Forest est entraîné sur sept variables couvrant différents sous-systèmes de la
 turbine (vitesse du vent, puissance, vitesse de rotor, température de l'huile du multiplicateur,
 température du palier du générateur, température de la nacelle, angle de pale). Ce choix permet
-de détecter des anomalies invisibles sur la seule courbe de puissance — par exemple une
+de détecter des anomalies invisibles sur la seule courbe de puissance, par exemple une
 combinaison de légers écarts sur plusieurs variables, chacun insuffisant isolément pour être
 qualifié d'anormal. Cette approche évalue chaque observation indépendamment des autres.
 
@@ -87,7 +87,7 @@ précisément.
 Les résultats sont présentés via des graphiques Plotly interactifs (zoom, survol, navigation
 temporelle) : la localisation des anomalies ponctuelles sur la courbe de puissance, leur
 répartition dans le temps, et un graphique à deux volets superposant température brute et pente
-glissante pour la détection de dérive — permettant de visualiser directement le lien entre
+glissante pour la détection de dérive permettant de visualiser directement le lien entre
 signal brut et tendance détectée.
 
 ## 📊 Résultats
@@ -113,7 +113,7 @@ identifiés restent ponctuels et ne s'inscrivent pas dans une tendance de fond c
 plusieurs mois, cohérent avec une turbine ne présentant pas de signe de dégradation mécanique
 progressive sur la période analysée. La température de l'huile du multiplicateur oscille dans
 une plage (50-60°C) cohérente avec le fonctionnement normal d'un tel système, chauffé par
-friction mécanique et généralement complété par un système de préchauffage — un point vérifié
+friction mécanique et généralement complété par un système de préchauffage, un point vérifié
 explicitement plutôt que supposé, la plage de valeurs ayant d'abord semblé surprenante au regard
 des conditions climatiques extérieures.
 
@@ -121,7 +121,7 @@ des conditions climatiques extérieures.
 
 **Isolation Forest** évalue chaque observation indépendamment, sans notion de continuité
 temporelle. Une dérive lente et progressive peut ne jamais franchir individuellement le seuil
-d'anomalie, même si la tendance est significative sur la durée — c'est la limite que la détection
+d'anomalie, même si la tendance est significative sur la durée, c'est la limite que la détection
 de dérive vient partiellement compenser.
 
 **La détection de dérive**, de son côté, a ses propres limites :
@@ -132,7 +132,7 @@ de dérive vient partiellement compenser.
   l'huile du multiplicateur isolément, sans combiner plusieurs signaux comme le fait Isolation
   Forest.
 - Le **seuil d'alerte** (90e percentile) est une heuristique statistique, pas un seuil validé
-  par un expert métier ou par des données de panne réelles — une calibration plus rigoureuse
+  par un expert métier ou par des données de panne réelles, une calibration plus rigoureuse
   nécessiterait un historique de maintenance documenté.
 - La **taille de la fenêtre glissante** (7 jours) est un choix arbitraire ; une fenêtre plus
   courte capterait des dérives plus rapides au prix de plus de faux positifs, une fenêtre plus
