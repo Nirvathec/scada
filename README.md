@@ -1,20 +1,5 @@
 # 🌬️ Analyse de performance et détection d'anomalies — Parc éolien
 
-> Modélisation de la courbe de puissance, détection d'anomalies multivariées et suivi de
-> dérive temporelle sur des données réelles d'un parc éolien, combinant Isolation Forest
-> et analyse de tendance glissante.
-![courbe de puissance](assets/courbe_pussance_brut.png)
-![courbe de puissance identification anomalie](assets/courbe_de_puissance.png)
-![Score d'anomalie dans le temps](assets/Score_temporelle.png)
-![Détection de dérive](assets/derive_temporelle.png)
-
-![Python](https://img.shields.io/badge/Python-3.10+-blue)
-![scikit--learn](https://img.shields.io/badge/scikit--learn-1.3+-orange)
-![Plotly](https://img.shields.io/badge/Plotly-Interactive-3f4f75)
-![License](https://img.shields.io/badge/License-MIT-green)
-
----
-
 ## 🧠 En bref
 
 Ce projet exploite des données réelles (capteurs, production, températures, statuts) d'une
@@ -35,6 +20,23 @@ interprétable, puis superposer deux angles de détection d'anomalies complémen
 ponctuel et multivarié, l'autre temporel et ciblé.
 
 ---
+
+> Modélisation de la courbe de puissance, détection d'anomalies multivariées et suivi de
+> dérive temporelle sur des données réelles d'un parc éolien, combinant Isolation Forest
+> et analyse de tendance glissante.
+![courbe de puissance](assets/courbe_pussance_brut.png)
+![courbe de puissance identification anomalie](assets/courbe_de_puissance.png)
+![Score d'anomalie dans le temps](assets/Score_temporelle.png)
+![Détection de dérive](assets/derive_temporelle.png)
+
+![Python](https://img.shields.io/badge/Python-3.10+-blue)
+![scikit--learn](https://img.shields.io/badge/scikit--learn-1.3+-orange)
+![Plotly](https://img.shields.io/badge/Plotly-Interactive-3f4f75)
+![License](https://img.shields.io/badge/License-MIT-green)
+
+---
+
+
 
 ## 📋 Sommaire
 
