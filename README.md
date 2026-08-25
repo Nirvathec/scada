@@ -215,4 +215,4 @@ turbines à pas de temps 10 minutes.
 
 *Projet réalisé dans le cadre de mon portfolio en data science, avec un intérêt particulier pour
 les applications à l'énergie et à la maintenance industrielle.*
-*N'hésite pas à me contacter pour toute question : vergne.clement49@gmail.com*
+*N'hésite pas à me contacter pour toute question : vergne.clement.49@gmail.com*
