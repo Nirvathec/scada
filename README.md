@@ -87,7 +87,7 @@ précisément.
 
 **4. Visualisation :** 
 Les résultats sont présentés via des graphiques Plotly interactifs (zoom, survol, navigation
-temporelle) : la localisation des anomalies ponctuelles sur la courbe de puissance, leur
+temporelle), la localisation des anomalies ponctuelles sur la courbe de puissance, leur
 répartition dans le temps, et un graphique à deux volets superposant température brute et pente
 glissante pour la détection de dérive permettant de visualiser directement le lien entre
 signal brut et tendance détectée.
@@ -102,7 +102,7 @@ signal brut et tendance détectée.
 | Périodes de dérive détectées | Voir `drift_alert` dans le notebook, variable selon le seuil choisi |
 
 La courbe de puissance obtenue est cohérente avec le comportement théorique attendu (démarrage
-progressif dès ~3 m/s, plateau proche de la puissance nominale du modèle de turbine autour de
+progressif dès   ~3 m/s, plateau proche de la puissance nominale du modèle de turbine autour de
 2 000 kW), ce qui valide la qualité du nettoyage préalable.
 
 Les anomalies détectées par Isolation Forest ne présentent pas de clusters temporels marqués sur
