@@ -63,12 +63,12 @@ supervisées.
 
 ## 🔍 Méthodologie
 
-**1. Courbe de puissance** 
+**1. Courbe de puissance :** 
 Construction de la courbe de puissance selon la méthode standard de binning par tranche de
 vitesse de vent (largeur 0.5 m/s, cohérente avec la norme IEC 61400-12), après exclusion des
 périodes d'arrêt de la turbine. Cette courbe sert de référence de comportement attendu.
 
-**2. Détection d'anomalies multivariée** 
+**2. Détection d'anomalies multivariée :** 
 Un Isolation Forest est entraîné sur sept variables couvrant différents sous-systèmes de la
 turbine (vitesse du vent, puissance, vitesse de rotor, température de l'huile du multiplicateur,
 température du palier du générateur, température de la nacelle, angle de pale). Ce choix permet
@@ -76,7 +76,7 @@ de détecter des anomalies invisibles sur la seule courbe de puissance, par exem
 combinaison de légers écarts sur plusieurs variables, chacun insuffisant isolément pour être
 qualifié d'anormal. Cette approche évalue chaque observation indépendamment des autres.
 
-**3. Détection de dérive temporelle** 
+**3. Détection de dérive temporelle :** 
 Pour compenser l'absence de continuité temporelle d'Isolation Forest, une seconde approche
 calcule, heure par heure, la pente d'une régression linéaire glissante sur une fenêtre de 7
 jours (168h) appliquée à une variable de température clé (huile du multiplicateur). Une pente
@@ -85,7 +85,7 @@ invisible à un instant T mais significative sur la durée. Le seuil d'alerte es
 percentile des pentes observées sur l'historique, faute de vérité terrain pour le calibrer plus
 précisément.
 
-**4. Visualisation** 
+**4. Visualisation :** 
 Les résultats sont présentés via des graphiques Plotly interactifs (zoom, survol, navigation
 temporelle) : la localisation des anomalies ponctuelles sur la courbe de puissance, leur
 répartition dans le temps, et un graphique à deux volets superposant température brute et pente
